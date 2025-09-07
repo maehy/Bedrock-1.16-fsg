@@ -143,6 +143,7 @@
         0 6px 12px rgba(0,0,0,0.3);
       position: relative;
       image-rendering: pixelated;
+      /* Removed animation */
     }
 
     .blocky-btn::before {
@@ -210,6 +211,7 @@
       text-shadow: 0 0 10px var(--minecraft-green);
       position: relative;
       image-rendering: pixelated;
+      /* Removed animation */
     }
 
     .seed-box::before {
@@ -312,19 +314,7 @@
       }
     }
 
-    /* Add some minecraft-style animations */
-    @keyframes glow {
-      0%, 100% { 
-        text-shadow: 0 0 10px var(--minecraft-green);
-      }
-      50% { 
-        text-shadow: 0 0 20px var(--minecraft-green), 0 0 30px var(--minecraft-green);
-      }
-    }
-
-    .seed-box:not(:empty) {
-      animation: glow 2s ease-in-out infinite;
-    }
+    /* Removed minecraft-style animations for .seed-box */
   </style>
 </head>
 <body>
