@@ -2,141 +2,347 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Blocky Minecraft Seed Generator</title>
+  <title>MCBE 1.16 Fsg Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- VT323 Pixel Font for Minecraft feel -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --green: #228B22;
-      --brown: #8B5A2B;
-      --sand: #F5DEB3;
-      --white: #fff;
-      --black: #222;
+      --minecraft-green: #4CAF50;
+      --minecraft-dark-green: #2E7D32;
+      --minecraft-brown: #8D6E63;
+      --minecraft-dark-brown: #5D4037;
+      --minecraft-sand: #FFF8DC;
+      --minecraft-light-gray: #E0E0E0;
+      --minecraft-dark-gray: #424242;
+      --minecraft-black: #212121;
+      --minecraft-white: #FFFFFF;
+      --minecraft-blue: #2196F3;
+      --grass-green: #7CB342;
+      --dirt-brown: #795548;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      padding: 0;
-      background: var(--sand);
-      font-family: 'VT323', 'Roboto Mono', monospace, Arial, sans-serif;
-      color: var(--black);
+      padding: 20px;
+      background: linear-gradient(135deg, 
+        var(--minecraft-blue) 0%, 
+        #81C784 50%, 
+        var(--grass-green) 100%);
       min-height: 100vh;
+      font-family: 'VT323', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* Pixelated clouds background effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.8) 5%, transparent 15%),
+        radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.6) 8%, transparent 18%),
+        radial-gradient(ellipse at 40% 10%, rgba(255,255,255,0.7) 6%, transparent 16%),
+        radial-gradient(ellipse at 70% 50%, rgba(255,255,255,0.5) 10%, transparent 20%);
+      z-index: -1;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(20px); }
+    }
+
     h1 {
       text-align: center;
       font-family: 'VT323', monospace;
-      font-size: 5rem;
-      margin-top: 48px;
-      margin-bottom: 32px;
-      color: var(--green);
-      letter-spacing: 2px;
-      background: var(--brown);
-      padding: 18px 0;
-      border-radius: 16px;
-      border: 4px solid var(--green);
-      display: inline-block;
+      font-size: 4rem;
+      margin: 20px auto 40px;
+      color: var(--minecraft-white);
+      letter-spacing: 3px;
+      text-shadow: 
+        4px 4px 0px var(--minecraft-dark-brown),
+        8px 8px 0px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, 
+        var(--dirt-brown), 
+        var(--minecraft-brown), 
+        var(--dirt-brown));
+      padding: 20px 40px;
+      border-radius: 0;
+      border: 6px solid var(--minecraft-dark-brown);
+      box-shadow: 
+        inset 4px 4px 8px rgba(255,255,255,0.2),
+        inset -4px -4px 8px rgba(0,0,0,0.3),
+        0 8px 16px rgba(0,0,0,0.4);
       width: 90vw;
-      max-width: 900px;
-      box-sizing: border-box;
-    }
-    .container {
-      max-width: 540px;
-      margin: 0 auto;
-      margin-bottom: 60px;
-      background: var(--white);
-      border-radius: 28px;
-      border: 8px solid var(--brown);
-      padding: 60px 40px 36px 40px;
-      text-align: center;
+      max-width: 800px;
       position: relative;
     }
+
+    h1::before {
+      content: '⛏';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+    }
+
+    h1::after {
+      content: '🧱';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 90vw;
+      background: var(--minecraft-light-gray);
+      border: 8px solid var(--minecraft-dark-gray);
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      box-shadow: 
+        inset 4px 4px 8px rgba(255,255,255,0.3),
+        inset -4px -4px 8px rgba(0,0,0,0.2),
+        0 12px 24px rgba(0,0,0,0.4);
+      image-rendering: pixelated;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--minecraft-dark-gray) 0px,
+        var(--minecraft-dark-gray) 4px,
+        var(--minecraft-black) 4px,
+        var(--minecraft-black) 8px
+      );
+      z-index: -1;
+    }
+
     .blocky-btn {
-      font-size: 2.4rem;
-      background: var(--green);
-      color: var(--white);
-      border: 4px solid var(--brown);
-      border-radius: 12px;
-      padding: 28px 60px;
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, 
+        var(--minecraft-green), 
+        var(--minecraft-dark-green));
+      color: var(--minecraft-white);
+      border: 6px solid var(--minecraft-dark-green);
+      padding: 20px 50px;
       cursor: pointer;
-      font-family: 'VT323', 'Roboto Mono', monospace;
+      font-family: 'VT323', monospace;
       font-weight: bold;
-      margin-bottom: 36px;
+      margin-bottom: 30px;
       letter-spacing: 2px;
-      transition: none;
+      transition: all 0.1s ease;
       outline: none;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      box-shadow: 
+        inset 3px 3px 6px rgba(255,255,255,0.3),
+        inset -3px -3px 6px rgba(0,0,0,0.3),
+        0 6px 12px rgba(0,0,0,0.3);
+      position: relative;
+      image-rendering: pixelated;
     }
-    .blocky-btn:hover, .blocky-btn:focus {
-      background: var(--brown);
-      color: var(--sand);
-      border-color: var(--green);
+
+    .blocky-btn::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.2), 
+        transparent 50%);
+      pointer-events: none;
     }
-    .blocky-btn:active {
-      background: var(--sand);
-      color: var(--black);
-      border-color: var(--green);
+
+    .blocky-btn:hover:not([disabled]) {
+      background: linear-gradient(45deg, 
+        var(--minecraft-dark-green), 
+        var(--minecraft-green));
+      transform: translateY(2px);
+      box-shadow: 
+        inset 3px 3px 6px rgba(255,255,255,0.4),
+        inset -3px -3px 6px rgba(0,0,0,0.4),
+        0 4px 8px rgba(0,0,0,0.4);
     }
+
+    .blocky-btn:active:not([disabled]) {
+      background: var(--minecraft-dark-green);
+      transform: translateY(4px);
+      box-shadow: 
+        inset 2px 2px 4px rgba(0,0,0,0.4),
+        0 2px 4px rgba(0,0,0,0.3);
+    }
+
     .blocky-btn[disabled] {
-      background: var(--sand);
+      background: var(--minecraft-dark-gray);
       cursor: not-allowed;
-      color: var(--brown);
-      opacity: 0.7;
-      border-color: var(--brown);
+      color: var(--minecraft-light-gray);
+      border-color: var(--minecraft-black);
+      transform: none;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0,0,0,0.3),
+        0 2px 4px rgba(0,0,0,0.2);
     }
+
     .seed-box {
-      margin-top: 24px;
-      background: var(--sand);
-      border: 6px solid var(--green);
-      border-radius: 16px;
-      min-height: 80px;
+      margin-top: 20px;
+      background: var(--minecraft-black);
+      border: 6px solid var(--minecraft-dark-gray);
+      min-height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3.5rem;
-      font-family: 'VT323', 'Roboto Mono', monospace;
-      color: var(--brown);
+      font-size: 3rem;
+      font-family: 'VT323', monospace;
+      color: var(--minecraft-green);
       letter-spacing: 2px;
-      padding: 32px;
+      padding: 20px;
       word-break: break-word;
-      margin-bottom: 18px;
-      transition: none;
+      margin-bottom: 20px;
+      box-shadow: 
+        inset 4px 4px 8px rgba(0,0,0,0.8),
+        inset -4px -4px 8px rgba(255,255,255,0.1),
+        0 4px 8px rgba(0,0,0,0.3);
+      text-shadow: 0 0 10px var(--minecraft-green);
+      position: relative;
+      image-rendering: pixelated;
     }
+
+    .seed-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(76, 175, 80, 0.1) 2px,
+        rgba(76, 175, 80, 0.1) 4px
+      );
+      pointer-events: none;
+    }
+
     .seed-box:empty {
-      min-height: 80px;
-      color: var(--brown);
-      font-size: 2.5rem;
+      min-height: 100px;
+      color: var(--minecraft-dark-gray);
+      font-size: 2rem;
+      text-shadow: none;
     }
+
     .cooldown {
-      margin-top: 18px;
-      color: var(--brown);
-      font-size: 2.5rem;
+      margin-top: 20px;
+      color: var(--minecraft-dark-brown);
+      font-size: 2rem;
       font-family: 'VT323', monospace;
       letter-spacing: 2px;
-      height: 2em;
+      height: 2.5em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      font-weight: bold;
     }
-    @media (max-width: 700px) {
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
       h1 {
         font-size: 2.5rem;
-        margin-top: 18px;
-        padding: 6px 0;
+        margin: 10px auto 20px;
+        padding: 15px 20px;
       }
+      
+      h1::before, h1::after {
+        font-size: 2rem;
+      }
+      
       .container {
-        padding: 18px 4px 10px 4px;
+        padding: 20px 15px;
       }
+      
       .blocky-btn {
-        padding: 12px 10px;
-        font-size: 1.2rem;
+        padding: 15px 30px;
+        font-size: 2rem;
       }
+      
       .seed-box {
-        font-size: 1.2rem;
-        padding: 8px;
+        font-size: 2rem;
+        padding: 15px;
+        min-height: 80px;
       }
+      
+      .seed-box:empty {
+        font-size: 1.5rem;
+      }
+      
       .cooldown {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
       }
     }
-    .container, .blocky-btn, .seed-box {
-      image-rendering: pixelated;
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+        padding: 10px 15px;
+      }
+      
+      h1::before, h1::after {
+        display: none;
+      }
+      
+      .blocky-btn {
+        padding: 12px 25px;
+        font-size: 1.8rem;
+      }
+      
+      .seed-box {
+        font-size: 1.8rem;
+        padding: 12px;
+      }
+      
+      .cooldown {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* Add some minecraft-style animations */
+    @keyframes glow {
+      0%, 100% { 
+        text-shadow: 0 0 10px var(--minecraft-green);
+      }
+      50% { 
+        text-shadow: 0 0 20px var(--minecraft-green), 0 0 30px var(--minecraft-green);
+      }
+    }
+
+    .seed-box:not(:empty) {
+      animation: glow 2s ease-in-out infinite;
     }
   </style>
 </head>
@@ -150,7 +356,7 @@
   <script>
     const codici = [
       "62503398","12505606","87512077","31287178","31311208","6348670","68854478",
-      "139711 bastion: 110 -60","43906426","37682101","56433316","93954214","68948296",
+      "139711","43906426","37682101","56433316","93954214","68948296",
       "68979332","56500207","87758603","37767821","87799305","25344140",
       "12860144","398341","412427","16255248","94185982","6698464",
       "19207506","69323843","31827802","13094607","69361511",
