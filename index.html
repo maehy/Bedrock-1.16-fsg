@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blocky Minecraft Seed Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #8ec07c;
+      font-family: 'Press Start 2P', monospace, 'Arial';
+      color: #222;
+    }
+    .container {
+      max-width: 420px;
+      margin: 60px auto;
+      background: #bdae93;
+      border-radius: 18px;
+      border: 8px solid #665c54;
+      box-shadow: 0 8px 32px #28282855;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #3c3836;
+      text-shadow: 2px 2px 0 #d79921;
+      font-family: 'Press Start 2P', cursive, monospace;
+      letter-spacing: 2px;
+    }
+    .blocky-btn {
+      font-size: 1rem;
+      background: #458588;
+      color: #fff;
+      border: 4px solid #282828;
+      border-radius: 8px;
+      padding: 16px 30px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #282828, 0 0px 12px #28282833;
+      font-family: 'Press Start 2P', cursive, monospace;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .blocky-btn:active {
+      background: #689d6a;
+      transform: translateY(2px);
+    }
+    .blocky-btn[disabled] {
+      background: #928374;
+      cursor: not-allowed;
+      color: #333;
+    }
+    .seed-box {
+      margin-top: 26px;
+      background: #ebdbb2;
+      border: 4px solid #d79921;
+      border-radius: 10px;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-family: 'Press Start 2P', cursive, monospace;
+      color: #282828;
+      letter-spacing: 1px;
+      padding: 14px;
+      box-shadow: 0 2px 8px #28282822;
+      word-break: break-word;
+    }
+    .cooldown {
+      margin-top: 16px;
+      color: #d79921;
+      font-size: 1rem;
+      font-family: 'Press Start 2P', cursive, monospace;
+      letter-spacing: 1px;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      .blocky-btn {
+        padding: 12px 16px;
+      }
+      .seed-box {
+        font-size: 1rem;
+        padding: 10px;
+      }
+    }
+    /* Blocky effect */
+    .container, .blocky-btn, .seed-box {
+      image-rendering: pixelated;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>🟩 Minecraft Seed Generator 🟫</h1>
+    <button class="blocky-btn" id="createSeedBtn">Create Seed</button>
+    <div class="seed-box" id="seedBox">Press "Create Seed" for a random seed!</div>
+    <div class="cooldown" id="cooldownMsg"></div>
+  </div>
+  <script>
+    const codici = [
+      "62503398","12505606","87512077","31287178","31311208","6348670","68854478",
+      "139711 bastion: 110 -60","43906426","37682101","56433316","93954214","68948296",
+      "68979332","56500207","87758603 lava housing","37767821","87799305","25344140 150 -100 fort",
+      "12860144","398341 350 47 26 for bastion","412427","16255248","94185982","6698464 160 -44 for bastion",
+      "19207506","69323843 neg x for sh, 160 -30 bastion","31827802 bastion pos neg","13094607","69361511",
+      "56959614","88212407","63218630","12860144","13094607","16286030","15756685","16865914","13725047",
+      "16010031","19207506","17108802","17643207","14471498","16610256","16084810","14071803","12505606",
+      "28169629","20059506","28823922","28845984","21346215","25737916","25821592","25825795","22079205",
+      "27079451","20224498","22123385","25922643","24681417","20958301","23464084","25344140","27848945",
+      "26005541","27265346","26645142","20398164","26023325","29841194","22976427","26795254","26825043",
+      "24336546","24970422","28111127","24990307","24373917","34382350","34388905","35018084","33144107",
+      "31287178","37540359","31311208","37584024","30732746","37682101","33312102","38946823","30200392",
+      "38951093","30833721","38980028","32735270","37767821","34648887","39666109","34688048","34072624",
+      "33456228","36593398","35348846","32230597","37230966","38505095","39753396","31020039","52620076",
+      "50226269","42741323","57761316","55289261","42793478","52856987","47859666","45389354","45395688",
+      "57910076","43034987","40545689","45571029","58083821","53115289","45711819","43261432","50805594",
+      "48322836","45873631","58374238","55907090","45926259","58467456","51035816","43580550","56130788",
+      "46201544","41242220","51251797","41324826","41357189","43886360","43906426","56411418","56433316",
+      "53936136","51458712","56500207","46561215","49206203","46814458","54333528","51853768","54397645",
+      "51893950","46920595","59424274","56959614","51967326","51974621","57026674","44539024","42059654",
+      "49587066","54639205","42147841","54678053","44713867","47217570","47299918","57316512","54815232",
+      "54819986","59831775","47363816","47383943","44907909","52410538","47431935","49975238"
+    ];
+
+    const btn = document.getElementById('createSeedBtn');
+    const seedBox = document.getElementById('seedBox');
+    const cooldownMsg = document.getElementById('cooldownMsg');
+    let cooldown = false;
+    let cooldownTime = 60; // seconds
+    let intervalId = null;
+
+    function getRandomSeed() {
+      const idx = Math.floor(Math.random() * codici.length);
+      return codici[idx];
+    }
+
+    function startCooldown() {
+      cooldown = true;
+      let timeLeft = cooldownTime;
+      btn.disabled = true;
+      cooldownMsg.textContent = `Cooldown: ${timeLeft}s`;
+      intervalId = setInterval(() => {
+        timeLeft--;
+        cooldownMsg.textContent = `Cooldown: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(intervalId);
+          btn.disabled = false;
+          cooldownMsg.textContent = '';
+          cooldown = false;
+        }
+      }, 1000);
+    }
+
+    btn.addEventListener('click', () => {
+      if (!cooldown) {
+        seedBox.textContent = getRandomSeed();
+        startCooldown();
+      }
+    });
+  </script>
+</body>
+</html>
