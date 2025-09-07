@@ -4,90 +4,116 @@
   <meta charset="UTF-8">
   <title>Blocky Minecraft Seed Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- VT323 Pixel Font for Minecraft feel -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #8ec07c;
-      font-family: 'Press Start 2P', monospace, 'Arial';
+      background: linear-gradient(135deg, #8ec07c 0%, #bdae93 100%);
+      font-family: 'VT323', 'Roboto Mono', monospace, Arial, sans-serif;
       color: #222;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'VT323', monospace;
+      font-size: 3.5rem;
+      margin-top: 48px;
+      margin-bottom: 18px;
+      color: #3c3836;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 #d79921, 0 0 16px #28282833;
     }
     .container {
       max-width: 420px;
-      margin: 60px auto;
-      background: #bdae93;
-      border-radius: 18px;
-      border: 8px solid #665c54;
+      margin: 0 auto;
+      margin-bottom: 60px;
+      background: rgba(189, 174, 147, 0.96);
+      border-radius: 24px;
+      border: 6px solid #665c54;
       box-shadow: 0 8px 32px #28282855;
-      padding: 32px;
+      padding: 36px 28px 24px 28px;
       text-align: center;
       position: relative;
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #3c3836;
-      text-shadow: 2px 2px 0 #d79921;
-      font-family: 'Press Start 2P', cursive, monospace;
-      letter-spacing: 2px;
-    }
     .blocky-btn {
-      font-size: 1rem;
-      background: #458588;
+      font-size: 1.35rem;
+      background: linear-gradient(90deg, #458588 60%, #689d6a 100%);
       color: #fff;
-      border: 4px solid #282828;
-      border-radius: 8px;
-      padding: 16px 30px;
+      border: 3px solid #282828;
+      border-radius: 10px;
+      padding: 18px 36px;
       cursor: pointer;
-      box-shadow: 0 2px 0 #282828, 0 0px 12px #28282833;
-      font-family: 'Press Start 2P', cursive, monospace;
-      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 0 #282828, 0 0px 16px #28282833;
+      font-family: 'VT323', 'Roboto Mono', monospace;
+      transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+      font-weight: bold;
+      margin-bottom: 22px;
+      letter-spacing: 1px;
+    }
+    .blocky-btn:hover {
+      background: linear-gradient(90deg, #689d6a 60%, #458588 100%);
+      box-shadow: 0 8px 16px #28282855;
+      transform: translateY(-2px) scale(1.04);
     }
     .blocky-btn:active {
-      background: #689d6a;
-      transform: translateY(2px);
+      background: #928374;
+      transform: translateY(2px) scale(0.98);
+      color: #333;
     }
     .blocky-btn[disabled] {
       background: #928374;
       cursor: not-allowed;
       color: #333;
+      opacity: 0.7;
     }
     .seed-box {
-      margin-top: 26px;
+      margin-top: 12px;
       background: #ebdbb2;
       border: 4px solid #d79921;
-      border-radius: 10px;
-      min-height: 54px;
+      border-radius: 12px;
+      min-height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      font-family: 'Press Start 2P', cursive, monospace;
+      font-size: 2.2rem;
+      font-family: 'VT323', 'Roboto Mono', monospace;
       color: #282828;
-      letter-spacing: 1px;
-      padding: 14px;
-      box-shadow: 0 2px 8px #28282822;
+      letter-spacing: 2px;
+      padding: 18px;
+      box-shadow: 0 3px 12px #28282822;
       word-break: break-word;
+      margin-bottom: 10px;
+      transition: box-shadow 0.18s;
+    }
+    .seed-box:empty {
+      min-height: 56px;
+      color: #928374;
+      font-size: 1.2rem;
     }
     .cooldown {
-      margin-top: 16px;
+      margin-top: 10px;
       color: #282828;
-      font-size: 1rem;
-      font-family: 'Press Start 2P', cursive, monospace;
+      font-size: 1.3rem;
+      font-family: 'VT323', monospace;
       letter-spacing: 1px;
+      height: 1.2em;
     }
-    @media (max-width: 500px) {
-      .container {
-        padding: 16px;
-      }
+    @media (max-width: 600px) {
       h1 {
-        font-size: 1.3rem;
+        font-size: 2.2rem;
+        margin-top: 24px;
+      }
+      .container {
+        padding: 14px;
       }
       .blocky-btn {
-        padding: 12px 16px;
+        padding: 14px 18px;
+        font-size: 1.1rem;
       }
       .seed-box {
-        font-size: 1rem;
+        font-size: 1.25rem;
         padding: 10px;
       }
     }
@@ -96,11 +122,10 @@
       image-rendering: pixelated;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+  <h1>Bedrock 1.16 FSG Generator</h1>
   <div class="container">
-    <h1>Bedrock 1.16 Fsg Generator</h1>
     <button class="blocky-btn" id="createSeedBtn">Create Seed</button>
     <div class="seed-box" id="seedBox">Press "Create Seed" for a random seed!</div>
     <div class="cooldown" id="cooldownMsg"></div>
