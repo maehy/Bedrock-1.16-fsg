@@ -443,112 +443,102 @@
     </div>
   </div>
 
-  <script>
-    const strongholdSeeds = [
-      "62503398","12505606","87512077","31287178","31311208","6348670","68854478",
-      "139711","43906426","37682101","56433316","93954214","68948296",
-      "68979332","56500207","87758603","37767821","87799305","25344140",
-      "12860144","398341","412427","16255248","94185982","6698464",
-      "19207506","69323843","31827802","13094607","69361511",
-      "56959614","88212407","63218630","12860144","13094607","16286030","15756685","16865914","13725047",
-      "16010031","19207506","17108802","17643207","14471498","16610256","16084810","14071803","12505606",
-      "28169629","20059506","28823922","28845984","21346215","25737916","25821592","25825795","22079205",
-      "27079451","20224498","22123385","25922643","24681417","20958301","23464084","25344140","27848945",
-      "26005541","27265346","26645142","20398164","26023325","29841194","22976427","26795254","26825043",
-      "24336546","24970422","28111127","24990307","24373917","34382350","34388905","35018084","33144107",
-      "31287178","37540359","31311208","37584024","30732746","37682101","33312102","38946823","30200392",
-      "38951093","30833721","38980028","32735270","37767821","34648887","39666109","34688048","34072624",
-      "33456228","36593398","35348846","32230597","37230966","38505095","39753396","31020039","52620076",
-      "50226269","42741323","57761316","55289261","42793478","52856987","47859666","45389354","45395688",
-      "57910076","43034987","40545689","45571029","58083821","53115289","45711819","43261432","50805594",
-      "48322836","45873631","58374238","55907090","45926259","58467456","51035816","43580550","56130788",
-      "46201544","41242220","51251797","41324826","41357189","43886360","43906426","56411418","56433316",
-      "53936136","51458712","56500207","46561215","49206203","46814458","54333528","51853768","54397645",
-      "51893950","46920595","59424274","56959614","51967326","51974621","57026674","44539024","42059654",
-      "49587066","54639205","42147841","54678053","44713867","47217570","47299918","57316512","54815232",
-      "54819986","59831775","47363816","47383943","44907909","52410538","47431935","49975238"
-    ];
+<script>
+  let strongholdSeeds = [];
+  let ruinedPortalSeeds = [];
 
-    const ruinedPortalSeeds = [
-      "98765432","87654321","76543210","65432109","54321098","43210987","32109876",
-      "21098765","10987654","90876543","89765432","78654321","67543210","56432109",
-      "45321098","34210987","23109876","12098765","19876543","98765432","87654321",
-      "76543210","65432109","54321098","43210987","32109876","21098765","10987654",
-      "90876543","89765432","78654321","67543210","56432109","45321098","34210987",
-      "23109876","12098765","19876543","98765432","87654321","76543210","65432109",
-      "54321098","43210987","32109876","21098765","10987654","90876543","89765432",
-      "78654321","67543210","56432109","45321098","34210987","23109876","12098765"
-    ];
+  let currentPage = 'filterPage';
+  let cooldowns = {
+    stronghold: { active: false, time: 60 },
+    ruinedPortal: { active: false, time: 60 }
+  };
+  let intervals = {};
 
-    let currentPage = 'filterPage';
-    let cooldowns = {
-      stronghold: { active: false, time: 60 },
-      ruinedPortal: { active: false, time: 60 }
-    };
-    let intervals = {};
+  // Load seeds from JSON
+  async function loadSeeds() {
+    try {
+      const [strongholdRes, ruinedPortalRes] = await Promise.all([
+        fetch("stronghold.json"),
+        fetch("ruinedportal.json")
+      ]);
 
-    function goToPage(pageId) {
-      // Hide all pages
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      
-      // Show selected page
-      document.getElementById(pageId).classList.add('active');
-      
-      // Apply red theme for ruined portal page
-      if (pageId === 'ruinedPortalPage') {
-        document.body.classList.add('red-theme');
-      } else {
-        document.body.classList.remove('red-theme');
-      }
-      
-      currentPage = pageId;
+      strongholdSeeds = await strongholdRes.json();
+      ruinedPortalSeeds = await ruinedPortalRes.json();
+
+      // enable buttons after loading
+      document.getElementById("strongholdSeedBtn").disabled = false;
+      document.getElementById("ruinedPortalSeedBtn").disabled = false;
+    } catch (err) {
+      console.error("Error loading seeds:", err);
+    }
+  }
+
+  function goToPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+
+    if (pageId === 'ruinedPortalPage') {
+      document.body.classList.add('red-theme');
+    } else {
+      document.body.classList.remove('red-theme');
     }
 
-    function getRandomSeed(seedArray) {
-      const idx = Math.floor(Math.random() * seedArray.length);
-      return seedArray[idx];
-    }
+    currentPage = pageId;
+  }
 
-    function startCooldown(type) {
-      cooldowns[type].active = true;
-      let timeLeft = cooldowns[type].time;
-      const btn = document.getElementById(`${type}SeedBtn`);
-      const cooldownMsg = document.getElementById(`${type}CooldownMsg`);
-      
-      btn.disabled = true;
+  function getRandomSeed(seedArray) {
+    const idx = Math.floor(Math.random() * seedArray.length);
+    return seedArray[idx];
+  }
+
+  function startCooldown(type) {
+    cooldowns[type].active = true;
+    let timeLeft = cooldowns[type].time;
+    const btn = document.getElementById(`${type}SeedBtn`);
+    const cooldownMsg = document.getElementById(`${type}CooldownMsg`);
+
+    btn.disabled = true;
+    cooldownMsg.textContent = `Cooldown: ${timeLeft}s`;
+
+    intervals[type] = setInterval(() => {
+      timeLeft--;
       cooldownMsg.textContent = `Cooldown: ${timeLeft}s`;
-      
-      intervals[type] = setInterval(() => {
-        timeLeft--;
-        cooldownMsg.textContent = `Cooldown: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(intervals[type]);
-          btn.disabled = false;
-          cooldownMsg.textContent = '';
-          cooldowns[type].active = false;
-        }
-      }, 1000);
+      if (timeLeft <= 0) {
+        clearInterval(intervals[type]);
+        btn.disabled = false;
+        cooldownMsg.textContent = '';
+        cooldowns[type].active = false;
+      }
+    }, 1000);
+  }
+
+  // Stronghold Village Generator
+  document.getElementById('strongholdSeedBtn').addEventListener('click', () => {
+    if (!cooldowns.stronghold.active && strongholdSeeds.length > 0) {
+      const seedBox = document.getElementById('strongholdSeedBox');
+      seedBox.textContent = getRandomSeed(strongholdSeeds);
+      seedBox.style.display = 'flex';
+      startCooldown('stronghold');
     }
+  });
 
-    // Stronghold Village Generator
-    document.getElementById('strongholdSeedBtn').addEventListener('click', () => {
-      if (!cooldowns.stronghold.active) {
-        const seedBox = document.getElementById('strongholdSeedBox');
-        seedBox.textContent = getRandomSeed(strongholdSeeds);
-        seedBox.style.display = 'flex';
-        startCooldown('stronghold');
-      }
-    });
+  // Ruined Portal Generator
+  document.getElementById('ruinedPortalSeedBtn').addEventListener('click', () => {
+    if (!cooldowns.ruinedPortal.active && ruinedPortalSeeds.length > 0) {
+      const seedBox = document.getElementById('ruinedPortalSeedBox');
+      seedBox.textContent = getRandomSeed(ruinedPortalSeeds);
+      seedBox.style.display = 'flex';
+      startCooldown('ruinedPortal');
+    }
+  });
 
-    // Ruined Portal Generator
-    document.getElementById('ruinedPortalSeedBtn').addEventListener('click', () => {
-      if (!cooldowns.ruinedPortal.active) {
-        const seedBox = document.getElementById('ruinedPortalSeedBox');
-        seedBox.textContent = getRandomSeed(ruinedPortalSeeds);
-        seedBox.style.display = 'flex';
-        startCooldown('ruinedPortal');
-      }
-    });
-  </script>
+  // disable buttons until seeds are loaded
+  document.getElementById("strongholdSeedBtn").disabled = true;
+  document.getElementById("ruinedPortalSeedBtn").disabled = true;
+
+  // Load seeds on page load
+  loadSeeds();
+</script>
+
 </body>
 </html>
