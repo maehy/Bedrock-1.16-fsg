@@ -274,6 +274,18 @@
       image-rendering: pixelated;
     }
 
+    .download-box {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0px;
+    }
+
+    .download-box a {
+      text-decoration: none;
+    }
+
     .seed-box::before {
       content: '';
       position: absolute;
@@ -448,6 +460,9 @@
     <h1>Bedrock 1.16 FSG Ruined Portal Generator</h1>
     <div class="container">
       <button class="blocky-btn" id="ruinedPortalSeedBtn">Generate Seed</button>
+      <div class="download-box" id="downloadBox">
+        <a href="ruinedportalfsg.mcpack" download class="blocky-btn filter-btn">Download Rpfsg Pack</a>
+      </div>
       <div class="seed-box" id="ruinedPortalSeedBox"></div>
       <div class="cooldown" id="ruinedPortalCooldownMsg"></div>
     </div>
@@ -536,8 +551,10 @@
   document.getElementById('ruinedPortalSeedBtn').addEventListener('click', () => {
     if (!cooldowns.ruinedPortal.active && ruinedPortalSeeds.length > 0) {
       const seedBox = document.getElementById('ruinedPortalSeedBox');
+      const downloadBox = document.getElementById('downloadBox');
       seedBox.textContent = getRandomSeed(ruinedPortalSeeds);
       seedBox.style.display = 'flex';
+      downloadBox.style.display = 'none';
       startCooldown('ruinedPortal');
     }
   });
