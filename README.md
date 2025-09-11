@@ -4,3 +4,5 @@ The filter is guaranteed to give a stronghold village spawn with a fastion in th
 You can find the page here: https://maehy.github.io/Bedrock-1.16-fsg/
 
 The .json files are the seed lists.
+
+The .mcpack is the Minecraft behaviour pack for the ruined portal variant.
