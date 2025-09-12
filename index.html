@@ -563,8 +563,32 @@
   document.getElementById("strongholdSeedBtn").disabled = true;
   document.getElementById("ruinedPortalSeedBtn").disabled = true;
 
+  function setupCopyOnDoubleClick(boxId) {
+  const box = document.getElementById(boxId);
+  box.addEventListener('dblclick', () => {
+    const seed = box.textContent.trim();
+    if (seed !== "") {
+      navigator.clipboard.writeText(seed).then(() => {
+        box.textContent = "Seed copied!";
+        setTimeout(() => {
+          box.textContent = seed;
+        }, 1500);
+      }).catch(err => {
+        console.error("Error in copy:", err);
+      });
+    }
+  });
+}
+
+// Inizializza la funzione per entrambe le seed box
+setupCopyOnDoubleClick('strongholdSeedBox');
+setupCopyOnDoubleClick('ruinedPortalSeedBox');
+
+
   // Load seeds on page load
   loadSeeds();
+
+  
 </script>
 
 </body>
