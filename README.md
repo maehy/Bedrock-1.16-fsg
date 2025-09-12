@@ -6,3 +6,5 @@ You can find the page here: https://maehy.github.io/Bedrock-1.16-fsg/
 The .json files are the seed lists.
 
 The .mcpack is the Minecraft behaviour pack for the ruined portal variant.
+
+Discord for collaboration and feedback: https://discord.gg/Hngq5zYw3k
