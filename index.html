@@ -49,6 +49,13 @@
         #EF5350 50%, 
         var(--minecraft-dark-red) 100%);
     }
+
+    body.gold-theme {
+      background: linear-gradient(135deg, 
+        #FFD700 0%, 
+        #FFC107 50%, 
+        #FF8F00 100%);
+    }
     
     body::before {
       content: '';
@@ -212,6 +219,23 @@
 
     .red-btn:active:not([disabled]) {
       background: var(--minecraft-dark-red);
+    }
+
+    .gold-btn {
+      background: linear-gradient(45deg, 
+        #FFD700, 
+        #FF8F00);
+      border-color: #FF8F00;
+    }
+
+    .gold-btn:hover:not([disabled]) {
+      background: linear-gradient(45deg, 
+        #FF8F00, 
+        #FFD700);
+    }
+
+    .gold-btn:active:not([disabled]) {
+      background: #FF8F00;
     }
 
     .filter-box {
@@ -556,6 +580,7 @@
       <div class="filter-options">
         <button class="blocky-btn filter-btn" onclick="goToPage('strongholdPage')">Stronghold Village</button>
         <button class="blocky-btn filter-btn red-btn" onclick="goToPage('ruinedPortalPage')">Ruined Portal</button>
+        <button class="blocky-btn filter-btn gold-btn" onclick="goToPage('classicPage')">Classic</button>
       </div>
     </div>
     <div class="discord">
@@ -596,6 +621,21 @@
     </div>
   </div>
 
+  
+  <!-- Classic Generator Page -->
+
+  
+  <div id="classicPage" class="page">
+    <button class="blocky-btn back-btn" onclick="goToPage('filterPage')">← Back</button>
+    <button class="blocky-btn help-btn" onclick="goToPage('helpPage')">Help</button>
+    <h1>Bedrock 1.16 FSG Classic Generator</h1>
+    <div class="container">
+      <button class="blocky-btn" id="classicSeedBtn">Generate Seed</button>
+      <div class="seed-box" id="classicSeedBox"></div>
+      <div class="cooldown" id="classicCooldownMsg"></div>
+    </div>
+  </div>
+
   <!-- Help Page -->
   <div id="helpPage" class="page">
     <button class="blocky-btn back-btn" onclick="goToPage('filterPage')">← Back</button>
@@ -613,28 +653,33 @@ For any additional info, request and feedback join the discord.</p>
 <script>
   let strongholdSeeds = [];
   let ruinedPortalSeeds = [];
+  let classicSeeds = [];
 
   let currentPage = 'filterPage';
   let cooldowns = {
     stronghold: { active: false, time: 10 },
-    ruinedPortal: { active: false, time: 10 }
+    ruinedPortal: { active: false, time: 10 },
+    classic: { active: false, time: 10 }
   };
   let intervals = {};
 
   // Load seeds from JSON
   async function loadSeeds() {
     try {
-      const [strongholdRes, ruinedPortalRes] = await Promise.all([
+      const [strongholdRes, ruinedPortalRes, classicRes] = await Promise.all([
         fetch("stronghold.json"),
-        fetch("ruinedportal.json")
+        fetch("ruinedportal.json"),
+        fetch("classic.json")
       ]);
 
       strongholdSeeds = await strongholdRes.json();
       ruinedPortalSeeds = await ruinedPortalRes.json();
+      classicSeeds = await classicRes.json();
 
       // enable buttons after loading
       document.getElementById("strongholdSeedBtn").disabled = false;
       document.getElementById("ruinedPortalSeedBtn").disabled = false;
+      document.getElementById("classicSeedBtn").disabled = false;
     } catch (err) {
       console.error("Error loading seeds:", err);
     }
@@ -645,9 +690,13 @@ For any additional info, request and feedback join the discord.</p>
     document.getElementById(pageId).classList.add('active');
 
     if (pageId === 'ruinedPortalPage') {
+      document.body.classList.remove('gold-theme');
       document.body.classList.add('red-theme');
-    } else {
+    } else if (pageId === 'classicPage') {
       document.body.classList.remove('red-theme');
+      document.body.classList.add('gold-theme');
+    } else {
+      document.body.classList.remove('red-theme', 'gold-theme');
     }
 
     currentPage = pageId;
@@ -701,9 +750,20 @@ For any additional info, request and feedback join the discord.</p>
     }
   });
 
+  // Classic Generator
+  document.getElementById('classicSeedBtn').addEventListener('click', () => {
+    if (!cooldowns.classic.active && classicSeeds.length > 0) {
+      const seedBox = document.getElementById('classicSeedBox');
+      seedBox.textContent = getRandomSeed(classicSeeds);
+      seedBox.style.display = 'flex';
+      startCooldown('classic');
+    }
+  });
+
   // disable buttons until seeds are loaded
   document.getElementById("strongholdSeedBtn").disabled = true;
   document.getElementById("ruinedPortalSeedBtn").disabled = true;
+  document.getElementById("classicSeedBtn").disabled = true;
 
   function setupCopyOnDoubleClick(boxId) {
   const box = document.getElementById(boxId);
@@ -725,6 +785,7 @@ For any additional info, request and feedback join the discord.</p>
 // Inizializza la funzione per entrambe le seed box
 setupCopyOnDoubleClick('strongholdSeedBox');
 setupCopyOnDoubleClick('ruinedPortalSeedBox');
+setupCopyOnDoubleClick('classicSeedBox');
 
 
   // Load seeds on page load
