@@ -332,12 +332,72 @@
         var(--minecraft-brown));
     }
 
+    .help-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      background: linear-gradient(45deg, 
+        var(--minecraft-brown), 
+        var(--minecraft-dark-brown));
+      border-color: var(--minecraft-dark-brown);
+    }
+
+    .help-btn:hover:not([disabled]) {
+      background: linear-gradient(45deg, 
+        var(--minecraft-dark-brown), 
+        var(--minecraft-brown));
+    }
+
     .page {
       display: none;
     }
 
     .page.active {
       display: block;
+    }
+
+    .help-content {
+      max-width: 600px;
+      width: 90vw;
+      background: var(--minecraft-light-gray);
+      border: 8px solid var(--minecraft-dark-gray);
+      padding: 40px;
+      text-align: left;
+      position: relative;
+      box-shadow: 
+        inset 4px 4px 8px rgba(255,255,255,0.3),
+        inset -4px -4px 8px rgba(0,0,0,0.2),
+        0 12px 24px rgba(0,0,0,0.4);
+      image-rendering: pixelated;
+      margin: 0 auto;
+    }
+
+    .help-content::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--minecraft-dark-gray) 0px,
+        var(--minecraft-dark-gray) 4px,
+        var(--minecraft-black) 4px,
+        var(--minecraft-black) 8px
+      );
+      z-index: -1;
+    }
+
+    .help-content p {
+      font-family: 'VT323', monospace;
+      font-size: 2rem;
+      color: var(--minecraft-black);
+      line-height: 1.4;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
     @media (max-width: 768px) {
@@ -376,7 +436,7 @@
         font-size: 1.5rem;
       }
 
-      .back-btn {
+      .back-btn, .help-btn {
         font-size: 1.2rem;
         padding: 8px 15px;
       }
@@ -384,6 +444,14 @@
       .filter-options {
         flex-direction: column;
         align-items: center;
+      }
+
+      .help-content {
+        padding: 20px 15px;
+      }
+
+      .help-content p {
+        font-size: 1.8rem;
       }
     }
 
@@ -413,9 +481,13 @@
         font-size: 1.3rem;
       }
 
-      .back-btn {
+      .back-btn, .help-btn {
         font-size: 1rem;
         padding: 6px 12px;
+      }
+
+      .help-content p {
+        font-size: 1.6rem;
       }
     }
       .discord {
@@ -477,6 +549,7 @@
 
 
   <div id="filterPage" class="page active">
+    <button class="blocky-btn help-btn" onclick="goToPage('helpPage')">Help</button>
     <h1>Bedrock 1.16 FSG Generator</h1>
     <div class="filter-box">
       Choose a Filter
@@ -496,6 +569,7 @@
   
   <div id="strongholdPage" class="page">
     <button class="blocky-btn back-btn" onclick="goToPage('filterPage')">← Back</button>
+    <button class="blocky-btn help-btn" onclick="goToPage('helpPage')">Help</button>
     <h1>Bedrock 1.16 FSG Stronghold Village Generator</h1>
     <div class="container">
       <button class="blocky-btn" id="strongholdSeedBtn">Generate Seed</button>
@@ -510,6 +584,7 @@
   
   <div id="ruinedPortalPage" class="page">
     <button class="blocky-btn back-btn" onclick="goToPage('filterPage')">← Back</button>
+    <button class="blocky-btn help-btn" onclick="goToPage('helpPage')">Help</button>
     <h1>Bedrock 1.16 FSG Ruined Portal Generator</h1>
     <div class="container">
       <button class="blocky-btn" id="ruinedPortalSeedBtn">Generate Seed</button>
@@ -518,6 +593,20 @@
       </div>
       <div class="seed-box" id="ruinedPortalSeedBox"></div>
       <div class="cooldown" id="ruinedPortalCooldownMsg"></div>
+    </div>
+  </div>
+
+  <!-- Help Page -->
+  <div id="helpPage" class="page">
+    <button class="blocky-btn back-btn" onclick="goToPage('filterPage')">← Back</button>
+    <h1>Help</h1>
+    <div class="help-content">
+      <p>This generator will guarantee very good seeds to practice.
+There are two filters:
+
+Stronghold Village: guarantees a very close village stronghold and fastion in nether.
+Ruined Portal: guarantees a very close ruined portal with looting 3 sword, 27 iron nuggets, a flint and steel and high odds of obsidian (with the pack). There is fastion in nether, and the strongholds are guaranteed to be within 2000 blocks from 0 0, which means that educated travel is guaranteed to be good.
+For any additional info, request and feedback join the discord.</p>
     </div>
   </div>
 
