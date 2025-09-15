@@ -1,10 +1,12 @@
 # This is a Minecraft Bedrock 1.16 Filtered Seed generator
 
-The filter is guaranteed to give a stronghold village spawn with a fastion in the nether. 
+
 You can find the page here: https://maehy.github.io/Bedrock-1.16-fsg/
 
 The .json files are the seed lists.
 
-The .mcpack is the Minecraft behaviour pack for the ruined portal variant.
+The .mcpack is the Minecraft behaviour pack for the ruined portal and classic variant.
 
-Discord for collaboration and feedback: https://discord.gg/Hngq5zYw3k
+For specific info about the generator, check the "Help" button in the page.
+
+Discord for collaboration, feedback and info: https://discord.gg/Hngq5zYw3k
