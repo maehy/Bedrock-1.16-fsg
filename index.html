@@ -807,35 +807,41 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
 
   // Stronghold Village Generator
   document.getElementById('strongholdSeedBtn').addEventListener('click', () => {
-    if (!cooldowns.stronghold.active && strongholdSeeds.length > 0) {
-      const seedBox = document.getElementById('strongholdSeedBox');
-      seedBox.textContent = getRandomSeed(strongholdSeeds);
-      seedBox.style.display = 'flex';
-      startCooldown('stronghold');
-    }
-  });
+  if (!cooldowns.stronghold.active && strongholdSeeds.length > 0) {
+    const seedBox = document.getElementById('strongholdSeedBox');
+    seedBox.textContent = getRandomSeed(strongholdSeeds);
+    seedBox.style.display = 'flex';
+    startCooldown('stronghold');
+    logClick("Stronghold"); // ← Log click
+  }
+});
+
 
   // Ruined Portal Generator
   document.getElementById('ruinedPortalSeedBtn').addEventListener('click', () => {
-    if (!cooldowns.ruinedPortal.active && ruinedPortalSeeds.length > 0) {
-      const seedBox = document.getElementById('ruinedPortalSeedBox');
-      const downloadBox = document.getElementById('downloadBox');
-      seedBox.textContent = getRandomSeed(ruinedPortalSeeds);
-      seedBox.style.display = 'flex';
-      downloadBox.style.display = 'none';
-      startCooldown('ruinedPortal');
-    }
-  });
+  if (!cooldowns.ruinedPortal.active && ruinedPortalSeeds.length > 0) {
+    const seedBox = document.getElementById('ruinedPortalSeedBox');
+    const downloadBox = document.getElementById('downloadBox');
+    seedBox.textContent = getRandomSeed(ruinedPortalSeeds);
+    seedBox.style.display = 'flex';
+    downloadBox.style.display = 'none';
+    startCooldown('ruinedPortal');
+    logClick("RuinedPortal"); // ← Log click
+  }
+});
+
 
   // Classic Generator
   document.getElementById('classicSeedBtn').addEventListener('click', () => {
-    if (!cooldowns.classic.active && classicSeeds.length > 0) {
-      const seedBox = document.getElementById('classicSeedBox');
-      seedBox.textContent = getRandomSeed(classicSeeds);
-      seedBox.style.display = 'flex';
-      startCooldown('classic');
-    }
-  });
+  if (!cooldowns.classic.active && classicSeeds.length > 0) {
+    const seedBox = document.getElementById('classicSeedBox');
+    seedBox.textContent = getRandomSeed(classicSeeds);
+    seedBox.style.display = 'flex';
+    startCooldown('classic');
+    logClick("Classic"); // ← Log click
+  }
+});
+
 
   // disable buttons until seeds are loaded
   document.getElementById("strongholdSeedBtn").disabled = true;
@@ -858,6 +864,23 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
     }
   });
 }
+
+  function logClick(generatorType) {
+  fetch("https://script.google.com/macros/s/AKfycbzvrxtMYgLflkX3pVrxwhFkqQSvppAnu3LqCsRGyMLvlBS50Is-GYICHbwZg36RPQW3/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `generator=${generatorType}`
+  }).then(response => {
+    if (!response.ok) {
+      console.error("Failed to log click");
+    }
+  }).catch(error => {
+    console.error("Error logging click:", error);
+  });
+}
+
 
 // Inizializza la funzione per entrambe le seed box
 setupCopyOnDoubleClick('strongholdSeedBox');
