@@ -812,7 +812,6 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
     seedBox.textContent = getRandomSeed(strongholdSeeds);
     seedBox.style.display = 'flex';
     startCooldown('stronghold');
-    logClick("Stronghold"); // ← Log click
   }
 });
 
@@ -826,7 +825,6 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
     seedBox.style.display = 'flex';
     downloadBox.style.display = 'none';
     startCooldown('ruinedPortal');
-    logClick("RuinedPortal"); // ← Log click
   }
 });
 
@@ -838,7 +836,6 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
     seedBox.textContent = getRandomSeed(classicSeeds);
     seedBox.style.display = 'flex';
     startCooldown('classic');
-    logClick("Classic"); // ← Log click
   }
 });
 
@@ -864,26 +861,6 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
     }
   });
 }
-
-  function logClick(generatorType) {
-  fetch("https://script.google.com/macros/s/AKfycbzsqUypv3mLQnpcjUrBeL_sx76tasP4FjCtXAUC6QtMDfBbwS0rLDVeobnLwhhXp-9T/exec", {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ generatorType })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Click logged:", data);
-  })
-  .catch(err => {
-    console.error("Error logging click:", err);
-  });
-}
-
-
 
 // Inizializza la funzione per entrambe le seed box
 setupCopyOnDoubleClick('strongholdSeedBox');
