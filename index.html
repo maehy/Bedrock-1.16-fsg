@@ -868,18 +868,21 @@ Classic: guarantees stronghold village and insta fort, greatly increased pearl r
   function logClick(generatorType) {
   fetch("https://script.google.com/macros/s/AKfycbzvrxtMYgLflkX3pVrxwhFkqQSvppAnu3LqCsRGyMLvlBS50Is-GYICHbwZg36RPQW3/exec", {
     method: "POST",
+    mode: "cors",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/json"
     },
-    body: `generator=${generatorType}`
-  }).then(response => {
-    if (!response.ok) {
-      console.error("Failed to log click");
-    }
-  }).catch(error => {
-    console.error("Error logging click:", error);
+    body: JSON.stringify({ generatorType })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Click logged:", data);
+  })
+  .catch(err => {
+    console.error("Error logging click:", err);
   });
 }
+
 
 
 // Inizializza la funzione per entrambe le seed box
